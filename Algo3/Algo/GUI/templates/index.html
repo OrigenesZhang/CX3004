@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>MDP Group 6</title>
+	<link rel="stylesheet" type="text/css" href="static/style.css">
+	<link rel="stylesheet" type="text/css" href="static/fonts/font.css">
+</head>
+<body>
+	<div id='parent'>
+		<div id='sidebar'>
+			<div id="sidebar-heading" class="headings"><h3>MDP GROUP 6</h3></div>
+			<div id=sidebar-content>
+				<button id="mapName">Load Map</button>
+				<div id="mapname" style="display: none">
+					<form>
+					  <p class="headings" style="text-align: left;">Name</p>
+					  <select name="name" value='map.txt' id='map-name'>
+						<option value='map.txt'>map.txt</option>
+						  <option value="sample1.txt">sample1.txt</option>
+						  <option value="sample2.txt">sample2.txt</option>
+						  <option value="sample3.txt">sample3.txt</option>
+						  <option value="sample4.txt">sample4.txt</option>
+						  <option value="sample5.txt">sample5.txt</option>
+					  </select>
+					  <br><br>
+					  <input id="loadMap" type="submit" value="Submit">
+					</form> 
+				</div>
+				<button id="start">Exploration</button>
+				<div id="explore" style="display: none;">
+					<form>
+					  <p class="headings" style="text-align: left;">TIME STEP</p>
+                        <input type="range" min="1" max="10" value="5" class="slider" name="t_s" id="time_step">
+						<p style="color: azure">Number of steps per second: <span id="time_step_value"></span></p>
+					  <br>
+					  <p class="headings" style="text-align: left;">TIME LIMIT</p>
+					  	<input type="range" min="1" max="60" value="30" class="slider" name="time_limit" id="time">
+						<p style="color: azure"><span id="time_limit_value"></span> s</p>
+					  <br>
+					  <p class="headings" style="text-align: left;">COVERAGE LIMIT</p>
+					  	<input type="range" min="0" max="100" value="100" class="slider" name="cover" id="percentage">
+						<p style="color: azure"><span id="percentage_value"></span> %</p>
+					  <br><br>
+					  <input id="exp_start" type="submit" value="Submit">
+					</form> 
+				</div>
+				<button id='waypoint'>Fastest Path</button>
+				<div id="way-point" style="display: none">
+					<p class="headings" style="text-align: left;">ENTER WAYPOINT:</p>
+					<form>
+					  <p class="headings" style="text-align: left;">X</p>
+					  <input type="text" name="x" value=10 id='way-x'>
+					  <br>
+					  <p class="headings" style="text-align: left;">Y</p>
+					  <input type="text" name="y" value=10 id='way-y'>
+					  <br><br>
+					  <input id="fsp" type="submit" value="Submit">
+					</form> 
+				</div>
+				<button id="reset">Reset</button>
+				<p class="headings" style="text-align: left;">TIMER<p id="timer"></p></p>
+				<p class="headings" style="text-align: left;">EXPLORED<p id="area"></p></p>
+			</div>
+		</div>
+		<div id='main'>
+			<div id='arena'>
+				<!-- Each 10 cm by 10cm space in the arena is represented by a 30px by 30px box in front end  -->
+				<canvas id="canvas" width="450" height="600">
+					
+				</canvas>
+				
+			</div>
+		</div>
+		<div id='logs'>
+			<div id="logs-heading" class="headings"><h3>LOGS</h3></div>
+			<div id="logs-content">
+			</div>
+		</div>
+
+	</div>
+
+	
+	<script type="text/javascript" src="static/custom.js"></script>
+</body>
+</html>

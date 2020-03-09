@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>Python</ID>
+  <OriginalElement>#/Users/origenes/Desktop/Algo3/Algo/Algo</OriginalElement>
+  <nodes>
+    <node x="0.0" y="213.0">Algo.Simulator.Robot</node>
+    <node x="0.0" y="142.0">Algo.FastestPath.Node</node>
+    <node x="0.0" y="0.0">Algo.FastestPath.FastestPath</node>
+    <node x="0.0" y="71.0">Algo.Exploration.Exploration</node>
+    <node x="0.0" y="284.0">object</node>
+    <node x="215.0" y="213.0">Algo.Real.Robot</node>
+  </nodes>
+  <notes />
+  <edges />
+  <settings layout="Hierarchic Group" zoom="1.0" x="175.0" y="155.0" />
+  <SelectedNodes />
+  <Categories />
+</Diagram>
+

@@ -304,7 +304,7 @@ class Robot:
 
     # Checks to see if there is a wall in front for the robot to calibrate
     def can_calibrate_front(self):
-       r, c = self.center
+        r, c = self.center
         flag = [False, None]
         if self.direction == NORTH:
             if((r - 2) < 0):

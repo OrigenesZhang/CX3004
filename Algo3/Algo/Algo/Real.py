@@ -1,6 +1,6 @@
 import numpy as np
 
-from Constants import MAX_ROWS, MAX_COLS, NORTH, SOUTH, EAST, WEST, RIGHT, LEFT, BOTTOM_LEFT_CORNER, BOTTOM_RIGHT_CORNER, TOP_RIGHT_CORNER, TOP_LEFT_CORNER, ALIGNRIGHT, ALIGNFRONT, BACKWARDS, FORWARD, FORWARDFAST, BACKWARDS, BACKWARDSFAST
+from Constants import MAX_ROWS, MAX_COLS, NORTH, SOUTH, EAST, WEST, RIGHT, LEFT, BOTTOM_LEFT_CORNER, BOTTOM_RIGHT_CORNER, TOP_RIGHT_CORNER, TOP_LEFT_CORNER, ALIGNRIGHT, ALIGNFRONT, BACKWARDS, FORWARD, FORWARDFAST, BACKWARDS, BACKWARDSFAST, ALIGNFRONT2
 
 
 class Robot:
@@ -304,28 +304,36 @@ class Robot:
 
     # Checks to see if there is a wall in front for the robot to calibrate
     def can_calibrate_front(self):
-        r, c = self.center
+       r, c = self.center
         flag = [False, None]
         if self.direction == NORTH:
             if((r - 2) < 0):
                 flag = [True, ALIGNFRONT]
             elif ((r - 2) >= 0 and (self.exploredMap[r-2][c-1] == 2 and self.exploredMap[r-2][c] == 2 and self.exploredMap[r-2][c+1] == 2)):
                 flag = [True, ALIGNFRONT]
+            elif ((r - 2) >= 0 and (self.exploredMap[r-2][c] == 2 and self.exploredMap[r-2][c+1] == 2)):
+                flag = [True, ALIGNFRONT2]
         elif self.direction == WEST:
             if((c - 2) < 0):
                 flag = [True, ALIGNFRONT]
             elif ((c-2) >= 0 and (self.exploredMap[r-1][c-2] == 2 and self.exploredMap[r][c-2] == 2 and self.exploredMap[r+1][c-2] == 2)):
                 flag = [True, ALIGNFRONT]
+            elif ((c-2) >= 0 and (self.exploredMap[r][c-2] == 2 and self.exploredMap[r-1][c-2] == 2)):
+                flag = [True, ALIGNFRONT2]
         elif self.direction == EAST:
             if((c + 2) == MAX_COLS):
                 flag = [True, ALIGNFRONT]
             elif ((c + 2) < MAX_COLS and (self.exploredMap[r-1][c+2] == 2 and self.exploredMap[r][c+2] == 2 and self.exploredMap[r+1][c+2] == 2)):
                 flag = [True, ALIGNFRONT]
+            elif ((c + 2) < MAX_COLS and (self.exploredMap[r][c+2] == 2 and self.exploredMap[r+1][c+2] == 2)):
+                flag = [True, ALIGNFRONT2]
         else:
             if((r+2) == MAX_ROWS):
                 flag = [True, ALIGNFRONT]
             elif ((r+2) < MAX_ROWS and (self.exploredMap[r+2][c-1] == 2 and self.exploredMap[r+2][c] == 2 and self.exploredMap[r+2][c+1] == 2)):
                 flag = [True, ALIGNFRONT]
+            elif ((r+2) < MAX_ROWS and (self.exploredMap[r+2][c-1] == 2 and self.exploredMap[r+2][c] == 2)):
+                flag = [True, ALIGNFRONT2]
         return flag
 
     # Checks to see if there is a wall to the right of the robot for it to calibrate
@@ -337,21 +345,29 @@ class Robot:
                 flag = [True, ALIGNRIGHT]
             elif ((c + 2) < MAX_COLS and (self.exploredMap[r-1][c+2] == 2 and self.exploredMap[r+1][c+2] == 2)):
                 flag = [True, ALIGNRIGHT]
+            elif ((c + 2) < MAX_COLS and (self.exploredMap[r][c+2] == 2 and self.exploredMap[r+1][c+2] == 2 and ((r+2< MAX_ROWS and self.exploredMap[r+2][c+2] != 2) or r+2 == MAX_ROWS))):
+                flag = [True, ALIGNFRONT2]
         elif self.direction == WEST:
             if((r - 2) < 0):
                 flag = [True, ALIGNRIGHT]
             elif ((r - 2) >= 0 and (self.exploredMap[r-2][c-1] == 2 and self.exploredMap[r-2][c+1] == 2)):
                 flag = [True, ALIGNRIGHT]
+            elif ((r - 2) >= 0 and (self.exploredMap[r-2][c] == 2 and self.exploredMap[r-2][c+1] == 2 and ((c+2< MAX_COLS and self.exploredMap[r-2][c+2] != 2) or c+2 ==MAX_ROWS) )):
+                flag = [True, ALIGNFRONT2]
         elif self.direction == EAST:
             if((r+2) == MAX_ROWS):
                 flag = [True, ALIGNRIGHT]
             elif ((r+2) < MAX_ROWS and (self.exploredMap[r+2][c-1] == 2 and self.exploredMap[r+2][c+1] == 2)):
                 flag = [True, ALIGNRIGHT]
+            elif ((r+2) < MAX_ROWS and (self.exploredMap[r+2][c-1] == 2 and self.exploredMap[r+2][c] == 2 and ((c-2>=0 and self.exploredMap[r+2][c-2] != 2) or c-2 <0) )):
+                flag = [True, ALIGNFRONT2]
         else:
             if((c - 2) < 0):
                 flag = [True, ALIGNRIGHT]
             elif ((c-2) >= 0 and (self.exploredMap[r-1][c-2] == 2 and self.exploredMap[r+1][c-2] == 2)):
                 flag = [True, ALIGNRIGHT]
+            elif ((c-2) >= 0 and (self.exploredMap[r-1][c-2] == 2 and self.exploredMap[r][c-2] == 2 and ((r-2>=0 and self.exploredMap[r-2][c-2]!=2)or r-2<0))):
+                flag = [True, ALIGNFRONT2]
         return flag
 
     def moveBot(self, movement):

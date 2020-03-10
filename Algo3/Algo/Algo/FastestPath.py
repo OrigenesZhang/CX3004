@@ -46,7 +46,7 @@ class FastestPath:
         waypoint (list): Coordinate of the way-point if specified
     """
 
-    def __init__(self, exploredMap, start, goal, direction, waypoint=None, calibrateLim=5, sim=True):
+    def __init__(self, exploredMap, start, goal, direction, waypoint=None, calibrateLim=5, sim=True, fastest=False):
         """Constructor to initialize an instance of the FastestPath class
 
         Args:
@@ -68,6 +68,8 @@ class FastestPath:
         self.movement = []
         self.calibrateLim = calibrateLim
         self.sim = sim
+        self.fastestAlignRightCount = 0
+        self.fastest = fastest
         if sim:
             from Simulator import Robot
             self.robot = Robot(self.exploredMap, direction, start, None)
@@ -504,6 +506,13 @@ class FastestPath:
             # Second element is horizontal distance from robot's centre to next space in path
             diff = self.robot.center - np.asarray(self.path[self.index])
             # If difference between row index of robot's centre and the next space is -1, ot means that the robot should move south
+            #every 3 steps can calibrate right, it calibrate right.
+            if self.fastest:
+                calibrate_right = self.robot.can_calibrate_right()
+                if (calibrate_right[0]):
+                    self.fastestAlignRightCount += 1
+                    if (self.fastestAlignRightCount % 3) == 0:
+                        movement.extend(ALIGNRIGHT)
             if (diff[0] == -1 and diff[1] == 0):  # Going south
                 if self.robot.direction == NORTH:
                     # If robot is facing north, it needs to turn right twice and move forward once before it can move south by one space

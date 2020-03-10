@@ -1,7 +1,7 @@
 import numpy as np
 import time
 
-from Constants import NORTH, SOUTH, WEST, EAST, FORWARD, LEFT, RIGHT, START, MAX_ROWS, MAX_COLS, ALIGNFRONT, ALIGNRIGHT
+from Constants import NORTH, SOUTH, WEST, EAST, FORWARD, LEFT, RIGHT, START, MAX_ROWS, MAX_COLS, ALIGNFRONT, ALIGNRIGHT, ALIGNFRONT2
 
 
 """
@@ -130,16 +130,21 @@ class Exploration:
                 #     move.append(ALIGNFRONT)
                 # If robot is not at a corner but there is a wall to the right for calibration
                 if (calibrate_right[0]):
-                    self.alignRightCount += 1
-                    if(self.alignRightCount % 3) == 0:
-                        move.append(RIGHT)
-                        move.append(ALIGNFRONT)
-                        move.append(LEFT)
-                        move.append(ALIGNRIGHT)
-                        #added , may remove later
+                    if (calibrate_right[1] == ALIGNRIGHT):
+                        self.alignRightCount += 1
+                        if(self.alignRightCount % 3) == 0:
+                            move.append(RIGHT)
+                            move.append(ALIGNFRONT)
+                            move.append(LEFT)
+                            move.append(ALIGNRIGHT)
+                            #added , may remove later
+                        else:
+                            # Append command from can_calibrate_right function
+                            move.append(calibrate_right[1])
                     else:
-                        # Append command from can_calibrate_right function
-                        move.append(calibrate_right[1])
+                        move.append(RIGHT)
+                        move.append(ALIGNFRONT2)
+                        move.append(LEFT)
                 # If robot is not at a corner and there is no wall to the right of the robot
                 # If there is a wall to the front for calibration
                 elif (calibrate_front[0]):

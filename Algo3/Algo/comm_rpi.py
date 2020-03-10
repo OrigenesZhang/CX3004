@@ -862,7 +862,7 @@ class RPi(threading.Thread):
 
 
                 elif (split_data[0] == "FASTEST"):
-                    fsp = FastestPath(currentMap, START, GOAL, EAST, waypoint, sim=False)
+                    fsp = FastestPath(currentMap, START, GOAL, EAST, waypoint, sim=False, fastest=True)
                     #file1= np.ones([20, 15])
                     #sim=True
                     #fsp = FastestPath(file1, START, GOAL, direction, waypoint, sim)

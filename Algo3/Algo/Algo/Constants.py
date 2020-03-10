@@ -32,6 +32,7 @@ BACKWARDS = "b" # Move backwards by 10cm
 FORWARD = "f"
 ALIGNRIGHT = "i" # Tell robot to align itself using obstacles on the right
 # ALIGNRIGHT = "rol"
+ALIGNFRONT2 = "x"
 ALIGNFRONT = "o" # Tell robot to align itself using obstacles on the front
 
 

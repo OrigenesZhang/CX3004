@@ -615,7 +615,8 @@ class RPi(threading.Thread):
                             steps += 1  
                             # If the robot goes back to the start after explorin more than 50% of the arena
                             #if (np.array_equal(exp.robot.center, START) and exp.exploredArea > 50 and continueExplore):
-                            if (np.array_equal(exp.robot.center, START) and exp.exploredArea > 95 and continueExplore):
+                            # I force a full exploration here
+                            if (np.array_equal(exp.robot.center, START) and exp.exploredArea >= 99.67 and continueExplore):
                                 # Increase cycle count by 1
                                 numCycle += 1
                                 continueExplore = False

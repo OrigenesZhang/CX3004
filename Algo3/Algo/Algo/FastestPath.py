@@ -1,7 +1,7 @@
 import copy
 import numpy as np
 
-from Constants import MAX_ROWS, MAX_COLS, NORTH, SOUTH, EAST, WEST, FORWARD, LEFT, RIGHT, BACKWARDS
+from Constants import MAX_ROWS, MAX_COLS, NORTH, SOUTH, EAST, WEST, FORWARD, LEFT, RIGHT, BACKWARDS, ALIGNRIGHT
 
 
 class Node:

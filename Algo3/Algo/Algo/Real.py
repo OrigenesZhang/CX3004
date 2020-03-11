@@ -65,9 +65,8 @@ class Robot:
                 r, c = coord
                 if (0 <= r < MAX_ROWS) and (0 <= c < MAX_COLS) and (coord not in startInds) and (coord not in goalInds):
                     if self.phase == 1:
-                        # right = true only for right top sensor
-                        # sr is False only for bottom right and left sensor
-                        if (self.exploredMap[r][c] == 1 and vals[idx] == 2 and sr and (not right)):                            
+                        #if (self.exploredMap[r][c] == 1 and vals[idx] == 2 and sr and (not right)):
+                        if (self.exploredMap[r][c] == 1 and vals[idx] == 2 and sr):
                             self.exploredMap[r][c] = vals[idx]
                             self.marked[r][c] = 1 # Changed to = 1 not == 1
                         # If any one of the condition above holds true and r, c is an obstacle, break out of the loop
@@ -111,10 +110,11 @@ class Robot:
                 if (0 <= r < MAX_ROWS) and (0 <= c < MAX_COLS) and (coord not in startInds) and (coord not in goalInds):
                     # for override
                     if self.phase == 1:
-                        # right = true only for right top sensor
-                        # sr is False only for bottom right and middle left sensor
-                        if (self.exploredMap[r][c] == 2 and vals[idx] == 1 and sr and (not right)):
-                            # and self.marked[r][c] < 2 
+                        # right==true for right top and right bottom
+                        # sr ==False for right bottom and left changed to only left
+                        #if (self.exploredMap[r][c] == 2 and vals[idx] == 1 and sr and (not right)):
+                        if (self.exploredMap[r][c] == 2 and vals[idx] == 1 and sr):
+                        # and self.marked[r][c] < 2
                             
                             self.exploredMap[r][c] = vals[idx]
                             self.marked[r][c] = 1 # Changed to = 1 not == 1
@@ -167,7 +167,8 @@ class Robot:
         distanceShort = 2
         distanceLong = 4
         r, c = self.center
-
+        # right==true for right top and right bottom
+        # sr ==False for right bottom and left changed to only left
         # Front Left
         if self.direction == NORTH:
             self.getValue(zip(range(r-distanceShort-1, r-1), [c-1]*distanceShort)[::-1],
@@ -227,18 +228,18 @@ class Robot:
         # Right Bottom
         if self.direction == NORTH:
             self.getValue(zip([r+1]*distanceShort, range(c+2, c+distanceShort+2)),
-                          sensor_vals[4], distanceShort, False, True)
+                          sensor_vals[4], distanceShort, True, True)
         elif self.direction == EAST:
             self.getValue(zip(range(r+2, r+distanceShort+2), [c-1]*distanceShort),
-                          sensor_vals[4], distanceShort, False, True)
+                          sensor_vals[4], distanceShort, True, True)
         elif self.direction == WEST:
             self.getValue(zip(range(r-distanceShort-1, r-1), [c+1]*distanceShort)[::-1],
-                          sensor_vals[4], distanceShort, False, True)
+                          sensor_vals[4], distanceShort, True, True)
         else:
             self.getValue(zip([r-1]*distanceShort, range(c-distanceShort-1, c-1))[::-1],
-                          sensor_vals[4], distanceShort, False)
+                          sensor_vals[4], distanceShort, True, True)
         
-        # Left middle
+        # Left
         if self.direction == NORTH:
             self.getValue(zip([r+1]*distanceLong, range(c-distanceLong-1, c-1))[::-1],
                           sensor_vals[5], distanceLong, False)

@@ -599,7 +599,8 @@ class RPi(threading.Thread):
                         arduino_msg = arduino_message_formatter(move)
                         android_msg = android_message_formatter('EXPLORE',[str(exp.robot.descriptor_1()), str(exp.robot.descriptor_2()), "[" + str(19 - exp.robot.center[0]) + "," + str(exp.robot.center[1]) + "]", exp.robot.direction])
                     else:
-                        # If not 100% coverage
+                        # If not 100% coverage or even if 100, but not start
+                        #if ((exp.exploredArea <= 99.67 or np.array_equal(exp.robot.center, START)) and continueExplore):
                         if (exp.exploredArea <= 99.67 and continueExplore):
                             current = exp.moveStep(sensors) # Get next movements and whether or not 100% covergae is reached
                             currentMap = exp.currentMap
@@ -613,7 +614,8 @@ class RPi(threading.Thread):
                                 START, GOAL, elapsedTime)
                             steps += 1  
                             # If the robot goes back to the start after explorin more than 50% of the arena
-                            if (np.array_equal(exp.robot.center, START) and exp.exploredArea > 50 and continueExplore):
+                            #if (np.array_equal(exp.robot.center, START) and exp.exploredArea > 50 and continueExplore):
+                            if (np.array_equal(exp.robot.center, START) and exp.exploredArea > 95 and continueExplore):
                                 # Increase cycle count by 1
                                 numCycle += 1
                                 continueExplore = False
@@ -803,6 +805,8 @@ class RPi(threading.Thread):
                             move = []
                             if(np.array_equal(exp.robot.center, START) == False):
                                 # Initiate fastest path without any waypoint to get from robot's current position to the start point
+                                #try: instead of fsp, still use right wall hugging to go back to start. but tell moveStep() not to update the map
+                                # or just let it continue to explore until it reaches start?
                                 fsp = FastestPath(currentMap, exp.robot.center, START, exp.robot.direction,
                                                 None, sim=False)
                                 logger('Fastest Path Started !')

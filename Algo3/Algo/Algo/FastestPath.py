@@ -69,7 +69,7 @@ class FastestPath:
         self.calibrateLim = calibrateLim
         self.sim = sim
         self.fastestAlignRightCount = 0
-        self.fastest = fastest
+        self.fastest = fastest #will be true only during the fastestpath run, not the exploration
         if sim:
             from Simulator import Robot
             self.robot = Robot(self.exploredMap, direction, start, None)

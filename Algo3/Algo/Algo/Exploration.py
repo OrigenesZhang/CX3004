@@ -132,7 +132,7 @@ class Exploration:
                 if (calibrate_right[0]):
                     if (calibrate_right[1] == ALIGNRIGHT):
                         self.alignRightCount += 1
-                        if(self.alignRightCount % 3) == 0:
+                        if(self.alignRightCount % 3) == 1:
                             move.append(RIGHT)
                             move.append(ALIGNFRONT)
                             move.append(LEFT)
@@ -172,8 +172,8 @@ class Exploration:
                     for i in range(front):
                         self.robot.moveBot(FORWARD)
                     move.extend([FORWARD]*front)
-                # Else if the robot's left is free
                 elif (self.checkFree([3, 0, 1, 2], self.robot.center)):
+                    # Else if the robot's left is free
                     # Move robot to the left
                     self.robot.moveBot(LEFT)
                     move.append(LEFT)
@@ -262,19 +262,23 @@ class Exploration:
         if self.robot.direction == NORTH:
             if(c-2 < 0):
                 return False
-            return (self.currentMap[r][c - 2] == 0 or self.currentMap[r+1][c - 2] == 0)
+            #return (self.currentMap[r][c - 2] == 0 or self.currentMap[r+1][c - 2] == 0)
+            return (self.currentMap[r][c - 2] == 0 or self.currentMap[r+1][c - 2] == 0 or self.currentMap[r-1][c - 2] == 0)
         elif self.robot.direction == EAST:
             if(r-2 < 0):
                 return False
-            return (self.currentMap[r-2][c] == 0 or self.currentMap[r-2][c-1] == 0)
+            #return (self.currentMap[r-2][c] == 0 or self.currentMap[r-2][c-1] == 0
+            return (self.currentMap[r-2][c] == 0 or self.currentMap[r-2][c-1] == 0 or self.currentMap[r-2][c+1] == 0)
         elif self.robot.direction == SOUTH:
             if(c+2 >= MAX_COLS):
                 return False
-            return (self.currentMap[r][c+2] == 0 or self.currentMap[r-1][c+2] == 0)
+            #return (self.currentMap[r][c+2] == 0 or self.currentMap[r-1][c+2] == 0)
+            return (self.currentMap[r][c + 2] == 0 or self.currentMap[r - 1][c + 2] == 0 or self.currentMap[r + 1][c + 2] == 0)
         else:
             if(r+2 >= MAX_ROWS):
                 return False
-            return (self.currentMap[r+2][c] == 0 or self.currentMap[r+2][c+1] == 0)
+            #return (self.currentMap[r + 2][c] == 0 or self.currentMap[r + 2][c + 1] == 0)
+            return (self.currentMap[r+2][c] == 0 or self.currentMap[r+2][c+1] == 0 or self.currentMap[r+2][c-1] == 0)
     
     def checkRightUnexplored(self):
         r, c = self.robot.center
@@ -423,7 +427,7 @@ class Exploration:
         flag = True
         inds = []
         distanceShort = 2
-        distanceLong = 4
+        distanceLong = 3
         if self.robot.direction == NORTH:
             # If r = 5, c = 8, distanceShort = 3 and distanceLong = 5
             # zip([r-1]*distanceShort, range(c+2, c+distanceShort+2))
@@ -500,7 +504,12 @@ class Exploration:
         if (sensor_vals):
             self.robot.getSensors(sensor_vals)
         else:
-            self.robot.getSensors()
+            #self.robot.getSensors()
+            pass
+
+        if(sensor_vals[3]!=0 or sensor_vals[4]!=0):
+            self.alignRightCount = 0
+        #whenever there's no right wall, the counter clears to zero.
         move = self.nextMove()
         self.getExploredArea()
         # If full coverage
@@ -510,6 +519,12 @@ class Exploration:
         #    return move,True
         else:
             return move, False
+
+
+    def moveToStart(self):
+    #after exploration, use right wall hugging to go to a wall first
+        pass
+
 
     def explore(self):
         """Runs the exploration till the map is fully explored of time runs out

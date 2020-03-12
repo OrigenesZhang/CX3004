@@ -429,12 +429,12 @@ class Robot:
             self.setHead()
 
 
-    def fillUnexplored(self):
-        #fill the unexplored cells with blocks
-        for i in range(MAX_ROWS):
-            for j in range(MAX_COLS):
-                if self.exploredMap[i][j] == 0:
-                    self.exploredMap[i][j] = 2
+    # def fillUnexplored(self):
+    #     #fill the unexplored cells with blocks
+    #     for i in range(MAX_ROWS):
+    #         for j in range(MAX_COLS):
+    #             if self.exploredMap[i][j] == 0:
+    #                 self.exploredMap[i][j] = 2
 
 
     def descriptor_1(self):

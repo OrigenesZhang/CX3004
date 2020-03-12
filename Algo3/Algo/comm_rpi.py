@@ -626,7 +626,7 @@ class RPi(threading.Thread):
                             # If the robot goes back to the start after explorin more than 50% of the arena
                             #if (np.array_equal(exp.robot.center, START) and exp.exploredArea > 50 and continueExplore):
                             # I force a full exploration here
-                            if (np.array_equal(exp.robot.center, START) and exp.exploredArea >= 99.67 and continueExplore):
+                            if (np.array_equal(exp.robot.center, START) and exp.exploredArea >= 95 and continueExplore):
                                 # Increase cycle count by 1
                                 numCycle += 1
                                 continueExplore = False
@@ -847,11 +847,6 @@ class RPi(threading.Thread):
                             arduino_msg_done= arduino_message_formatter(move + calibrate_move, getSensor=False)
                             #arduino_calibrate_msg = arduino_message_formatter(calibrate_move, getSensor=False)
                             explorationDone=True
-
-                            #fill the unexplored cells if the expored area <100
-                            if exp.exploredArea<100:
-                                exp.robot.fillUnexplored()
-                            
                             android_msg = android_message_formatter('DONE', [str(exp.robot.descriptor_1()), str(exp.robot.descriptor_2()), "[" + str(19 - exp.robot.center[0]) + "," + str(exp.robot.center[1]) + "]", EAST])
                             
                             time.sleep(0.1)

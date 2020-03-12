@@ -912,6 +912,8 @@ class RPi(threading.Thread):
                         exp.robot.moveBot(move)
                     arduino_msg = arduino_message_formatter(manual_movement)
                     self.send_arduino_message(arduino_msg)
+                    android_msg = android_message_formatter("DONE", [str(exp.robot.descriptor_1()),str(exp.robot.descriptor_2()),"[" + str(19 - exp.robot.center[0]) + "," + str(exp.robot.center[1]) + "]", exp.robot.direction])
+                    self.client_socket.send(android_msg)
 
     def keep_main(self):
         while True:

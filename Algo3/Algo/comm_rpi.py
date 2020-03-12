@@ -405,7 +405,7 @@ def android_send_fastest(msg, array):
     return m.encode('utf-8')
 
 
-def arduino_message_formatter(movement, getSensor=True):
+def arduino_message_formatter(movement, getSensor=True, fastest = False):
 
     if not isinstance(movement, list):
         movement = movement.tolist()
@@ -452,8 +452,13 @@ def arduino_message_formatter(movement, getSensor=True):
                 if res[i + 1] == '0':
                     i += 2
                     continue
-                # if res[i] == FORWARD or res[i] == BACKWARDS:
-                #     res1 += res[i : i+2] + '\n'
+                if fastest and res[i] == FORWARD:
+                    tmp = int(res[i+1])
+                    while(tmp>3):
+                        res1 += 3
+                        tmp -=3
+                    res1 += tmp
+
                 else:
                     tmp = int(res[i + 1])
                     while tmp > 0:
@@ -558,8 +563,9 @@ class RPi(threading.Thread):
                     path.append(tuple(exp.robot.center))
                     update(exp.currentMap, exp.exploredArea, exp.robot.center, exp.robot.head,
                            START, GOAL, 0)
-                    arduino_msg = arduino_message_formatter([ALIGNFRONT, LEFT, ALIGNFRONT, LEFT, ALIGNRIGHT])
+                    arduino_msg = arduino_message_formatter([])
                     self.send_arduino_message(arduino_msg)
+
                     # arduino_msg = arduino_message_formatter(["N"], getSensor=False)
                     # self.send_arduino_message(arduino_msg,exp)  #Sent AN to Arduino ( pass AN to Rpi, send N to Arduino)
 
@@ -867,6 +873,11 @@ class RPi(threading.Thread):
                 #     time.sleep(4)
                 #     self.send_arduino_message(arduino_calibrate_msg,exp)
                     # Set waypoint
+                elif (split_data[0] == "CALIBRATE"):
+                    arduino_msg = arduino_message_formatter([ALIGNFRONT, LEFT, ALIGNFRONT, LEFT, ALIGNRIGHT], getSensor = False)
+                    self.send_arduino_message(arduino_msg)
+
+
                 elif (split_data[0] == 'WAYPOINT'):
                     global waypoint
                     waypoint = map(int, split_data[1:])
@@ -891,7 +902,7 @@ class RPi(threading.Thread):
                     print("FastestP move: ", move)
                     print("FastestP path: ", path)
 
-                    arduino_msg = arduino_message_formatter(move, getSensor=False)
+                    arduino_msg = arduino_message_formatter(move, getSensor=False, fastest = True)
 #--------------------> changed sending move to android instead of path
                     android_msg = android_send_fastest('FASTEST', move)
                     self.client_socket.send(android_msg)

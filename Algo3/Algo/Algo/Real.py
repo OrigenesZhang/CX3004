@@ -1,6 +1,6 @@
 import numpy as np
 
-from Constants import MAX_ROWS, MAX_COLS, NORTH, SOUTH, EAST, WEST, RIGHT, LEFT, BOTTOM_LEFT_CORNER, BOTTOM_RIGHT_CORNER, TOP_RIGHT_CORNER, TOP_LEFT_CORNER, ALIGNRIGHT, ALIGNFRONT, BACKWARDS, FORWARD, FORWARDFAST, BACKWARDS, BACKWARDSFAST, ALIGNFRONT2
+from Constants import START, MAX_ROWS, MAX_COLS, NORTH, SOUTH, EAST, WEST, RIGHT, LEFT, BOTTOM_LEFT_CORNER, BOTTOM_RIGHT_CORNER, TOP_RIGHT_CORNER, TOP_LEFT_CORNER, ALIGNRIGHT, ALIGNFRONT, BACKWARDS, FORWARD, FORWARDFAST, BACKWARDS, BACKWARDSFAST, ALIGNFRONT2
 
 
 class Robot:
@@ -427,6 +427,15 @@ class Robot:
                 self.center = self.center + [0, 1]
                 self.markArea(self.center, 1)
             self.setHead()
+
+
+    def fillUnexplored(self):
+        #fill the unexplored cells with blocks
+        for i in range(MAX_ROWS):
+            for j in range(MAX_COLS):
+                if self.exploredMap[i][j] == 0:
+                    self.exploredMap[i][j] = 2
+
 
     def descriptor_1(self):
         descriptor = np.zeros([20, 15]).astype(int)

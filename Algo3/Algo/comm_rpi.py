@@ -433,7 +433,7 @@ def arduino_message_formatter(movement, getSensor=True):
           res += str(count)
         else:
           res = res[:-1]
-            
+
         # for i in range(0, len(res), 2):
         #
         #     if (res[i]==RIGHT and res[i+1] == "2") or (res[i]==LEFT and res[i+1] == "2"):
@@ -457,16 +457,20 @@ def arduino_message_formatter(movement, getSensor=True):
                 else:
                     tmp = int(res[i + 1])
                     while tmp > 0:
-                        res1 += res[i] + '\n'
+                        #res1 += res[i] + '\n'
+                        res1 += res[i]
                         tmp -= 1
                 i += 2
             else:
-                res1 += res[i] + '\n'
+                #res1 += res[i] + '\n'
+                res1 += res[i]
                 i += 1
     if not getSensor:
-        msg = "h" + res1 + '\n'
+        #msg = "h" + res1 + '\n'
+        msg = "h" + res1
     else:
-        msg = "h" + res1 + 's\n'
+        #msg = "h" + res1 + 's\n'
+        msg = "h" + res1 + "s"
     return msg.encode('utf-8')
 
 
@@ -837,6 +841,10 @@ class RPi(threading.Thread):
                             arduino_msg_done= arduino_message_formatter(move + calibrate_move, getSensor=False)
                             #arduino_calibrate_msg = arduino_message_formatter(calibrate_move, getSensor=False)
                             explorationDone=True
+
+                            #fill the unexplored cells if the expored area <100
+                            if exp.exploredArea<100:
+                                exp.robot.fillUnexplored()
                             
                             android_msg = android_message_formatter('DONE', [str(exp.robot.descriptor_1()), str(exp.robot.descriptor_2()), "[" + str(19 - exp.robot.center[0]) + "," + str(exp.robot.center[1]) + "]", EAST])
                             

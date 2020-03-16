@@ -454,10 +454,10 @@ def arduino_message_formatter(movement, getSensor=True, fastest = False):
                     continue
                 if fastest and res[i] == FORWARD:
                     tmp = int(res[i+1])
-                    while(tmp>3):
-                        res1 += 3
-                        tmp -=3
-                    res1 += tmp
+                    while tmp > 3:
+                        res1 += '3'
+                        tmp -= 3
+                    res1 += str(tmp)
 
                 else:
                     tmp = int(res[i + 1])

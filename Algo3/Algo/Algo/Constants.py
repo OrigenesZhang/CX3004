@@ -30,10 +30,10 @@ ROTATE180 = "rr"
 BACKWARDS = "b" # Move backwards by 10cm
 #Forward Commands x10cm
 FORWARD = "f"
-ALIGNRIGHT = "ii" # Tell robot to align itself using obstacles on the right
+ALIGNRIGHT = "i" # Tell robot to align itself using obstacles on the right
 # ALIGNRIGHT = "rol"
-ALIGNFRONT2 = "xx"#align front with 2 sensors
-ALIGNFRONT = "oo" # Tell robot to align itself using obstacles on the front
+ALIGNFRONT2 = "x"#align front with 2 sensors
+ALIGNFRONT = "o" # Tell robot to align itself using obstacles on the front
 
 
 # Arena is 200cm by 150cm

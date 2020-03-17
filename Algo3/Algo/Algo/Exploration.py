@@ -115,6 +115,8 @@ class Exploration:
 
         if(not (self.sim) and self.robot.is_corner() == True):
             move = [RIGHT, ALIGNFRONT, LEFT, ALIGNFRONT, LEFT, ALIGNRIGHT]
+            self.alignRightCount = 1
+            # so that it will not rol again right after the corner calibration.
             self.robot.moveBot(LEFT)
         else:
             if not (self.sim):

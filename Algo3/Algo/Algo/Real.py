@@ -22,10 +22,16 @@ class Robot:
 
         Args:
             exploredMap (Numpy array): To initial state of the exploration map
+            hierarchyMap (Numpy array): confidence level of the mapping
             direction (int): The starting direction for the robot (see Constants)
             start (list): The starting center location of the robot
         """
         self.exploredMap = exploredMap
+        # 0 -- unexplored
+        # 1 -- marked by left sensor
+        # 2 -- marked by right sensors
+        # 3 -- marked by front sensors
+        self.hierarchyMap = np.zeros((20, 15))
         self.direction = direction
         self.center = np.asarray(start)
         self.marked = np.zeros((20, 15))
@@ -65,22 +71,49 @@ class Robot:
                 r, c = coord
                 if (0 <= r < MAX_ROWS) and (0 <= c < MAX_COLS) and (coord not in startInds) and (coord not in goalInds):
                     if self.phase == 1:
-                        #if (self.exploredMap[r][c] == 1 and vals[idx] == 2 and sr and (not right)):
-                        if (self.exploredMap[r][c] == 1 and vals[idx] == 2 and sr):
-                            self.exploredMap[r][c] = vals[idx]
-                            self.marked[r][c] = 1 # Changed to = 1 not == 1
+                        if self.exploredMap[r][c] == 1 and vals[idx] == 2 and sr:
+                            if not right:   # front sensor
+                                self.exploredMap[r][c] = vals[idx]
+                                self.marked[r][c] = 1   # Changed to = 1 not == 1
+                                self.hierarchyMap[r][c] = 3
+                            else:   # right sensor
+                                if self.hierarchyMap[r][c] > 2:
+                                    continue
+                                self.exploredMap[r][c] = vals[idx]
+                                self.marked[r][c] = 1
+                                self.hierarchyMap[r][c] = 2
                         # If any one of the condition above holds true and r, c is an obstacle, break out of the loop
                         elif self.exploredMap[r][c] == 2:
+                            if sr:
+                                if right:
+                                    self.hierarchyMap[r][c] = max(2, self.hierarchyMap[r][c])     # right
+                                else:
+                                    self.hierarchyMap[r][c] = 3     # front
+                            else:
+                                self.hierarchyMap[r][c] = max(1, self.hierarchyMap[r][c])         # left
                             break
-                        elif (self.exploredMap[r][c] == 0): # If unexplored
+                        elif self.exploredMap[r][c] == 0: # If unexplored
                             self.exploredMap[r][c] = vals[idx]
+                            if sr:
+                                if right:
+                                    self.hierarchyMap[r][c] = max(2, self.hierarchyMap[r][c])  # right
+                                else:
+                                    self.hierarchyMap[r][c] = 3  # front
+                            else:
+                                self.hierarchyMap[r][c] = max(1, self.hierarchyMap[r][c])  # left
                         # self.marker[r][c] is probably to indicate how many times the coordinate
                         # has been marked
                         self.marked[r][c] += 1
                     else:
+                        h_val = 1
+                        if not sr:
+                            h_val = 2
+                            if not right:
+                                h_val = 3
+                        self.hierarchyMap[r][c] = max(self.hierarchyMap[r][c], h_val)
                         if self.exploredMap[r][c] == 2:
                             break
-                        elif (self.exploredMap[r][c] == 0):
+                        elif self.exploredMap[r][c] == 0:
                             self.exploredMap[r][c] = vals[idx]
                 break
         else:
@@ -113,16 +146,30 @@ class Robot:
                         # right==true for right top and right bottom
                         # sr ==False for right bottom and left changed to only left
                         #if (self.exploredMap[r][c] == 2 and vals[idx] == 1 and sr and (not right)):
-                        if (self.exploredMap[r][c] == 2 and vals[idx] == 1 and sr):
-                        # and self.marked[r][c] < 2
-                            
-                            self.exploredMap[r][c] = vals[idx]
-                            self.marked[r][c] = 1 # Changed to = 1 not == 1
+                        if self.exploredMap[r][c] == 2 and vals[idx] == 1 and sr:
+                            if not right:
+                                self.exploredMap[r][c] = vals[idx]
+                                self.marked[r][c] = 1  # Changed to = 1 not == 1
+                                self.hierarchyMap[r][c] = 3
+                            else:
+                                if self.hierarchyMap[r][c] > 2:
+                                    continue
+                                self.exploredMap[r][c] = vals[idx]
+                                self.marked[r][c] = 1
+                                self.hierarchyMap[r][c] = 2
                         # If any one of the condition above holds true and r, c is an obstacle, break out of the loop
                         elif self.exploredMap[r][c] == 2:
                             break
-                        elif (self.exploredMap[r][c] == 0): # If unexplored
+                        elif self.exploredMap[r][c] == 0: # If unexplored
                             self.exploredMap[r][c] = vals[idx]
+                            if sr:
+                                if right:
+                                    self.hierarchyMap[r][c] = max(2, self.hierarchyMap[r][c])  # right
+                                else:
+                                    self.hierarchyMap[r][c] = 3  # front
+                            else:
+                                self.hierarchyMap[r][c] = max(1, self.hierarchyMap[r][c])  # left
+
                         # self.marker[r][c] is probably to indicate how many times the coordinate
                         # has been marked
                         self.marked[r][c] += 1
@@ -133,6 +180,13 @@ class Robot:
                             break
                         elif (self.exploredMap[r][c] == 0):
                             self.exploredMap[r][c] = vals[idx]
+                            if sr:
+                                if right:
+                                    self.hierarchyMap[r][c] = max(2, self.hierarchyMap[r][c])  # right
+                                else:
+                                    self.hierarchyMap[r][c] = 3  # front
+                            else:
+                                self.hierarchyMap[r][c] = max(1, self.hierarchyMap[r][c])  # left
                     # without override
                     # if self.exploredMap[r][c] == 0:
                     #     self.exploredMap[r][c] = vals[idx]

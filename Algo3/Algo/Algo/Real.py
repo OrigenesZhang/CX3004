@@ -78,7 +78,7 @@ class Robot:
                                 self.hierarchyMap[r][c] = 3
                             else:   # right sensor
                                 if self.hierarchyMap[r][c] > 2:
-                                    continue
+                                    break
                                 self.exploredMap[r][c] = vals[idx]
                                 self.marked[r][c] = 1
                                 self.hierarchyMap[r][c] = 2

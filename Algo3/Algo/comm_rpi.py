@@ -395,7 +395,7 @@ def output_formatter(msg, movement):
 def android_message_formatter(msg, array):
     if not isinstance(array, list):
         array = array.tolist()
-    msg = "a" + msg + '|' + '|'.join(map(str, array))
+    msg = "a" + msg + '|' + '|'.join(map(str, array)) + '!'
     return msg.encode('utf-8')
 
 def android_send_fastest(msg, array):

@@ -41,6 +41,7 @@ class Exploration:
         # Mark start as free
         self.currentMap[17:20, 0:3] = 1
         self.currentMap[0:3, 12:15] = 1
+        self.justCalibratedFront = False
         # call class according to running simulator or real run
         if sim:
             from Simulator import Robot
@@ -116,6 +117,7 @@ class Exploration:
         if(not (self.sim) and self.robot.is_corner() == True):
             move = [RIGHT, ALIGNFRONT, LEFT, ALIGNFRONT, LEFT, ALIGNRIGHT]
             self.alignRightCount = 1
+            self.justCalibratedFront = True
             # so that it will not rol again right after the corner calibration.
             self.robot.moveBot(LEFT)
         else:
@@ -134,24 +136,30 @@ class Exploration:
                 if (calibrate_right[0]):
                     if (calibrate_right[1] == ALIGNRIGHT):
                         self.alignRightCount += 1
-                        if(self.alignRightCount % 3) == 1:
+                        if self.alignRightCount % 3 == 1 and not self.justCalibratedFront:
                             move.append(RIGHT)
                             move.append(ALIGNFRONT)
                             move.append(LEFT)
                             move.append(ALIGNRIGHT)
+                            self.justCalibratedFront = True
                             #added , may remove later
                         else:
                             # Append command from can_calibrate_right function
                             move.append(calibrate_right[1])
+                            self.justCalibratedFront = False
                     else:
                         move.append(RIGHT)
                         move.append(ALIGNFRONT2)
                         move.append(LEFT)
+                        self.justCalibratedFront = False
                 # If robot is not at a corner and there is no wall to the right of the robot
                 # If there is a wall to the front for calibration
                 elif (calibrate_front[0]):
                     # Append command from can_calibrate_front function
                     move.append(calibrate_front[1])
+                    self.justCalibratedFront = True
+                else:
+                    self.justCalibratedFront = False
             # multi step
             # Number of spaces in front of the robot which is free and where there are obstacles on the right
             # and all spaces detectable by the left middle, right top and right bottom sensors at these spaces have been explored
@@ -173,7 +181,7 @@ class Exploration:
                     # Move robot forward according to frontFree function
                     for i in range(front):
                         self.robot.moveBot(FORWARD)
-                    move.extend([FORWARD]*front)
+                    move.extend([FORWARD] * front)
                 elif (self.checkFree([3, 0, 1, 2], self.robot.center)):
                     # Else if the robot's left is free
                     # Move robot to the left

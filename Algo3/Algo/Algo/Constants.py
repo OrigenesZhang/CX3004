@@ -30,7 +30,7 @@ ROTATE180 = "rr"
 BACKWARDS = "b" # Move backwards by 10cm
 #Forward Commands x10cm
 FORWARD = "f"
-ALIGNRIGHT = "i" # Tell robot to align itself using obstacles on the right
+ALIGNRIGHT = "" # Tell robot to align itself using obstacles on the right
 # ALIGNRIGHT = "rol"
 ALIGNFRONT2 = "x"#align front with 2 sensors
 ALIGNFRONT = "o" # Tell robot to align itself using obstacles on the front

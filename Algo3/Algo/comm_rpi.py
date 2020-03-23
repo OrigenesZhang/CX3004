@@ -479,13 +479,69 @@ def arduino_message_formatter(movement, getSensor=True, fastest = False):
     return msg.encode('utf-8')
 
 
-def image_string_formatter(lst,direction):
+def image_string_formatter(lst):
     str1="I"
     for coordinate in lst:
         str1+=str(coordinate)+"|"
-    str1+=direction
-    print("=========> Image String is: ",str1)
-    return str1
+    return str1.encode('utf-8')
+
+def image_recog(self, exp, currentMap):
+    r, c = exp.robot.center
+    #coordinate_list = [c, 19 - r, -1, -1, -1, -1, -1, -1]
+    haveObstacle = False
+    coordinate_list = [ -1, -1, -1, -1, -1, -1]
+    if exp.robot.direction == NORTH:
+        #if any cell 1 cell away in front is an obstacle
+        if r - 3 >= 0 and (currentMap[r - 3][c] == 2 or currentMap[r - 3][c + 1] == 2 or currentMap[r - 3][c - 1] == 2):
+            truth_value = True
+            if (currentMap[r - 3][c - 1] == 2):
+                coordinate_list[0:2] = [c - 1, 19 - (r - 3)]
+            if (currentMap[r - 3][c] == 2):
+                coordinate_list[2:4] = [c, 19 - (r - 3)]
+            if (currentMap[r - 3][c + 1] == 2):
+                coordinate_list[4:] = [c + 1, 19 - (r - 3)]
+            #return (haveObstacle, coordinate_list, exp.robot.direction)
+            return haveObstacle, coordinate_list
+
+    elif exp.robot.direction == EAST:
+        if c + 3 < MAX_COLS and (currentMap[r + 1][c + 3] == 2 or currentMap[r - 1][c + 3] == 2 or currentMap[r][c + 3] == 2):
+            truth_value = True
+            if (currentMap[r - 1][c + 3] == 2):
+                coordinate_list[0:2] = [c + 3, 19 - (r + 1)]
+            if (currentMap[r][c + 3] == 2):
+                coordinate_list[2:4] = [c + 3, 19 - r]
+            if (currentMap[r + 1][c + 3] == 2):
+                coordinate_list[4:] = [c + 3, 19 - (r - 1)]
+            #r eturn (truth_value, coordinate_list, exp.robot.direction)
+            return haveObstacle, coordinate_list
+
+    elif exp.robot.direction == SOUTH:
+        if r + 3 < MAX_ROWS and (
+                        currentMap[r + 3][c] == 2 or currentMap[r + 3][c + 1] == 2 or currentMap[r + 3][c - 1] == 2):
+            truth_value = True
+            if (currentMap[r + 3][c + 1] == 2):
+                coordinate_list[0:2] = [c + 1, 19 - (r + 3)]
+            if (currentMap[r + 3][c] == 2):
+                coordinate_list[2:4] = [c, 19 - (r + 3)]
+            if (currentMap[r + 3][c - 1] == 2):
+                coordinate_list[4:] = [c - 1, 19 - (r + 3)]
+            # return (truth_value, coordinate_list, exp.robot.direction)
+            return haveObstacle, coordinate_list
+
+    elif exp.robot.direction == WEST:
+         if c - 3 > 0 and (currentMap[r + 1][c - 3] == 2 or currentMap[r - 1][c - 3] == 2 or currentMap[r][c - 3] == 2):
+            truth_value = True
+            if (currentMap[r - 1][c - 3] == 2):
+                coordinate_list[0:2] = [c - 3, 19 - (r - 1)]
+            if (currentMap[r][c - 3] == 2):
+               coordinate_list[2:4] = [c - 3, 19 - r]
+            if (currentMap[r + 1][c - 3] == 2):
+                coordinate_list[4:] = [c - 3, 19 - (r + 1)]
+            # return (truth_value, coordinate_list, exp.robot.direction)
+            return haveObstacle, coordinate_list
+
+    return (False, [])
+
 
 #not using
 def fastestPath_with_align(list1):
@@ -580,14 +636,6 @@ class RPi(threading.Thread):
         sensor_val[4] is the value from the right bottom sensor
         sensor_val[5] is the value from the left middle sensor """
                     sensors = map(int, split_data[1:])
-                    currentPos = tuple(exp.robot.center)
-
-                    #truth_value, coordinate_list, direction = self.image_recog(exp,exp.currentMap)
-                    # if truth_value:
-                    #     r,c= currentPos
-                    #     image_str= image_string_formatter(coordinate_list, direction)
-                    #     self.client_socket.send(image_str)
-                    #     time.sleep(1)
 
                     if(fastestPathStart == True):
                         fastestPathStart = False
@@ -854,6 +902,13 @@ class RPi(threading.Thread):
                             print ('desc 3 = ' + str(exp.robot.descriptor_3()))
 
                             time.sleep(0.1)
+
+                    haveObstable, coordinate_list = self.image_recog(exp,exp.currentMap)
+                    if haveObstable:
+                        image_str= image_string_formatter(coordinate_list)
+                        self.client_socket.send(image_str)
+                        time.sleep(1)
+                    print ('Sent %s to RPi' % (image_str.decode('utf-8')))
 
                     self.client_socket.send(android_msg)
                     time.sleep(0.1)

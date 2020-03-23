@@ -368,8 +368,8 @@ class Robot:
                 flag = [True, ALIGNFRONT]
             elif ((r - 2) >= 0 and (self.exploredMap[r-2][c] == 2 and self.exploredMap[r-2][c+1] == 2)):
                 flag = [True, ALIGNFRONT2]
-            elif ((r - 3) >= 0 and (self.exploredMap[r-2][c] == 1 and self.exploredMap[r-3][c] == 2 and self.exploredMap[r-2][c+1] == 2)):
-                flag = [True, AlIGNFRONTSTAIR]
+            # elif ((r - 3) >= 0 and (self.exploredMap[r-2][c] == 1 and self.exploredMap[r-3][c] == 2 and self.exploredMap[r-2][c+1] == 2)):
+            #     flag = [True, AlIGNFRONTSTAIR]
         elif self.direction == WEST:
             if((c - 2) < 0):
                 flag = [True, ALIGNFRONT]
@@ -377,8 +377,8 @@ class Robot:
                 flag = [True, ALIGNFRONT]
             elif ((c-2) >= 0 and (self.exploredMap[r][c-2] == 2 and self.exploredMap[r-1][c-2] == 2)):
                 flag = [True, ALIGNFRONT2]
-            elif ((c-3) >= 0 and (self.exploredMap[r][c-2] == 1 and self.exploredMap[r][c-3] == 2 and self.exploredMap[r-1][c-2] == 2)):
-                flag = [True, AlIGNFRONTSTAIR]
+            # elif ((c-3) >= 0 and (self.exploredMap[r][c-2] == 1 and self.exploredMap[r][c-3] == 2 and self.exploredMap[r-1][c-2] == 2)):
+            #     flag = [True, AlIGNFRONTSTAIR]
         elif self.direction == EAST:
             if((c + 2) == MAX_COLS):
                 flag = [True, ALIGNFRONT]
@@ -386,8 +386,8 @@ class Robot:
                 flag = [True, ALIGNFRONT]
             elif ((c + 2) < MAX_COLS and (self.exploredMap[r][c+2] == 2 and self.exploredMap[r+1][c+2] == 2)):
                 flag = [True, ALIGNFRONT2]
-            elif ((c + 3) < MAX_COLS and (self.exploredMap[r][c+2] == 1 and self.exploredMap[r][c+3] == 2 and self.exploredMap[r+1][c+2] == 2)):
-                flag = [True, AlIGNFRONTSTAIR]
+            # elif ((c + 3) < MAX_COLS and (self.exploredMap[r][c+2] == 1 and self.exploredMap[r][c+3] == 2 and self.exploredMap[r+1][c+2] == 2)):
+            #     flag = [True, AlIGNFRONTSTAIR]
         else:
             if((r+2) == MAX_ROWS):
                 flag = [True, ALIGNFRONT]
@@ -395,8 +395,8 @@ class Robot:
                 flag = [True, ALIGNFRONT]
             elif ((r+2) < MAX_ROWS and (self.exploredMap[r+2][c-1] == 2 and self.exploredMap[r+2][c] == 2)):
                 flag = [True, ALIGNFRONT2]
-            elif ((r+3) < MAX_ROWS and (self.exploredMap[r+2][c-1] == 2 and self.exploredMap[r+2][c] == 1 and self.exploredMap[r+3][c]==2)):
-                flag = [True, AlIGNFRONTSTAIR]
+            # elif ((r+3) < MAX_ROWS and (self.exploredMap[r+2][c-1] == 2 and self.exploredMap[r+2][c] == 1 and self.exploredMap[r+3][c]==2)):
+            #     flag = [True, AlIGNFRONTSTAIR]
         return flag
 
     # Checks to see if there is a wall to the right of the robot for it to calibrate

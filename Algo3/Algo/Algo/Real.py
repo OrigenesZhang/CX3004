@@ -1,6 +1,6 @@
 import numpy as np
 
-from Constants import START, MAX_ROWS, MAX_COLS, NORTH, SOUTH, EAST, WEST, RIGHT, LEFT, BOTTOM_LEFT_CORNER, BOTTOM_RIGHT_CORNER, TOP_RIGHT_CORNER, TOP_LEFT_CORNER, ALIGNRIGHT, ALIGNFRONT, BACKWARDS, FORWARD, FORWARDFAST, BACKWARDS, BACKWARDSFAST, ALIGNFRONT2
+from Constants import START, MAX_ROWS, MAX_COLS, NORTH, SOUTH, EAST, WEST, RIGHT, LEFT, ALIGNFRONTSTAIRLeft, ALIGNFRONTSTAIRRight, BOTTOM_LEFT_CORNER, BOTTOM_RIGHT_CORNER, TOP_RIGHT_CORNER, TOP_LEFT_CORNER, ALIGNRIGHT, ALIGNFRONT, BACKWARDS, FORWARD, FORWARDFAST, BACKWARDS, BACKWARDSFAST, ALIGNFRONT2
 
 
 class Robot:
@@ -368,6 +368,13 @@ class Robot:
                 flag = [True, ALIGNFRONT]
             elif ((r - 2) >= 0 and (self.exploredMap[r-2][c] == 2 and self.exploredMap[r-2][c+1] == 2)):
                 flag = [True, ALIGNFRONT2]
+            elif ((r - 3) >= 0 and ((self.exploredMap[r-2][c] == 1 and self.exploredMap[r-3][c] == 2 and self.exploredMap[r-2][c+1] == 2)
+                                    or(self.exploredMap[r-2][c] == 2 and self.exploredMap[r-3][c+1] == 2 and self.exploredMap[r-2][c+1] == 1) )):
+                flag = [True, ALIGNFRONTSTAIRRight]
+            elif ((r - 3) >= 0 and ((self.exploredMap[r-2][c] == 1 and self.exploredMap[r-3][c] == 2 and self.exploredMap[r-2][c-1] == 2)
+                                    or(self.exploredMap[r-2][c] == 2 and self.exploredMap[r-3][c-1] == 2 and self.exploredMap[r-2][c-1] == 1) )):
+                flag = [True, ALIGNFRONTSTAIRLeft]
+
         elif self.direction == WEST:
             if((c - 2) < 0):
                 flag = [True, ALIGNFRONT]
@@ -375,6 +382,13 @@ class Robot:
                 flag = [True, ALIGNFRONT]
             elif ((c-2) >= 0 and (self.exploredMap[r][c-2] == 2 and self.exploredMap[r-1][c-2] == 2)):
                 flag = [True, ALIGNFRONT2]
+            elif ((c - 3) >= 0 and ((self.exploredMap[r][c - 2] == 1 and self.exploredMap[r][c - 3] == 2 and self.exploredMap[r - 1][c - 2] == 2)
+                  or(self.exploredMap[r][c - 2] == 2 and self.exploredMap[r-1][c - 2] == 1 and self.exploredMap[r - 1][c - 3] == 2))):
+                flag = [True, ALIGNFRONTSTAIRRight]
+            elif ((c - 3) >= 0 and ((self.exploredMap[r][c - 2] == 1 and self.exploredMap[r][c - 3] == 2 and self.exploredMap[r + 1][c - 2] == 2)
+                  or(self.exploredMap[r][c - 2] == 2 and self.exploredMap[r+1][c - 2] == 1 and self.exploredMap[r + 1][c - 3] == 2))):
+                flag = [True, ALIGNFRONTSTAIRLeft]
+
         elif self.direction == EAST:
             if((c + 2) == MAX_COLS):
                 flag = [True, ALIGNFRONT]
@@ -382,6 +396,12 @@ class Robot:
                 flag = [True, ALIGNFRONT]
             elif ((c + 2) < MAX_COLS and (self.exploredMap[r][c+2] == 2 and self.exploredMap[r+1][c+2] == 2)):
                 flag = [True, ALIGNFRONT2]
+            elif ((c + 3) < MAX_COLS and ((self.exploredMap[r][c + 2] == 1 and self.exploredMap[r][c + 3] == 2 and self.exploredMap[r + 1][c + 2] == 2)
+                  or (self.exploredMap[r][c + 2] == 2 and self.exploredMap[r+1][c + 3] == 2 and self.exploredMap[r + 1][c + 2] == 1))):
+                flag = [True, ALIGNFRONTSTAIRRight]
+            elif ((c + 3) < MAX_COLS and ((self.exploredMap[r][c + 2] == 1 and self.exploredMap[r][c + 3] == 2 and self.exploredMap[r - 1][c + 2] == 2)
+                  or (self.exploredMap[r][c + 2] == 2 and self.exploredMap[r-1][c + 3] == 2 and self.exploredMap[r - 1][c + 2] == 1))):
+                flag = [True, ALIGNFRONTSTAIRLeft]
         else:
             if((r+2) == MAX_ROWS):
                 flag = [True, ALIGNFRONT]
@@ -389,6 +409,12 @@ class Robot:
                 flag = [True, ALIGNFRONT]
             elif ((r+2) < MAX_ROWS and (self.exploredMap[r+2][c-1] == 2 and self.exploredMap[r+2][c] == 2)):
                 flag = [True, ALIGNFRONT2]
+            elif ((r + 3) < MAX_ROWS and ((self.exploredMap[r + 2][c - 1] == 2 and self.exploredMap[r + 2][c] == 1 and self.exploredMap[r + 3][c] == 2)
+                                          or (self.exploredMap[r + 2][c - 1] == 1 and self.exploredMap[r + 2][c] == 2 and self.exploredMap[r + 3][c-1] == 2))):
+                flag = [True,ALIGNFRONTSTAIRRight]
+            elif ((r + 3) < MAX_ROWS and ((self.exploredMap[r + 2][c + 1] == 2 and self.exploredMap[r + 2][c] == 1 and self.exploredMap[r + 3][c] == 2)
+                                          or (self.exploredMap[r + 2][c + 1] == 1 and self.exploredMap[r + 2][c] == 2 and self.exploredMap[r + 3][c+1] == 2))):
+                flag = [True,ALIGNFRONTSTAIRLeft]
         return flag
 
     # Checks to see if there is a wall to the right of the robot for it to calibrate

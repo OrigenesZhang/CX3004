@@ -34,7 +34,8 @@ ALIGNRIGHT = "i" # Tell robot to align itself using obstacles on the right
 # ALIGNRIGHT = "rol"
 ALIGNFRONT2 = "x"#align front with 2 sensors
 ALIGNFRONT = "o" # Tell robot to align itself using obstacles on the front
-
+ALIGNFRONTSTAIRRight = "z"#cali using front middle and right sensors, in the case of staircase
+ALIGNFRONTSTAIRLeft = "y"
 
 # Arena is 200cm by 150cm
 # We take each 10cm by 10cm square as a spot

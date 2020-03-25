@@ -600,16 +600,22 @@ class RPi(threading.Thread):
                         exp.robot.getSensors(sensors)
                         exp.robot.moveBot(fastestPathStartCommand)
                         arduino_msg = arduino_message_formatter(move)
-                        android_msg = android_message_formatter('EXPLORE',[str(exp.robot.descriptor_1()), str(exp.robot.descriptor_2()), "[" + str(19 - exp.robot.center[0]) + "," + str(exp.robot.center[1]) + "]", exp.robot.direction])
-                        print ('desc 3 = ' + str(exp.robot.descriptor_3()))
+                        # android_msg = android_message_formatter('EXPLORE',[str(exp.robot.descriptor_1()), str(exp.robot.descriptor_2()),str(exp.robot.descriptor_3()), "[" + str(19 - exp.robot.center[0]) + "," + str(exp.robot.center[1]) + "]", exp.robot.direction])
+                        android_msg = android_message_formatter('EXPLORE', [str(exp.robot.descriptor_1()),
+                                                                            str(exp.robot.descriptor_2()),"[" + str(
+                                19 - exp.robot.center[0]) + "," + str(exp.robot.center[1]) + "]", exp.robot.direction])
+
                     elif(returnFastestPath == True):
                         returnFastestPath = False
                         move = [returnFastestPathCommand]
                         exp.robot.getSensors(sensors)
                         exp.robot.moveBot(returnFastestPathCommand)
                         arduino_msg = arduino_message_formatter(move)
-                        android_msg = android_message_formatter('EXPLORE',[str(exp.robot.descriptor_1()), str(exp.robot.descriptor_2()), "[" + str(19 - exp.robot.center[0]) + "," + str(exp.robot.center[1]) + "]", exp.robot.direction])
-                        print ('desc 3 = ' + str(exp.robot.descriptor_3()))
+                        # android_msg = android_message_formatter('EXPLORE',[str(exp.robot.descriptor_1()), str(exp.robot.descriptor_2()),str(exp.robot.descriptor_3()), "[" + str(19 - exp.robot.center[0]) + "," + str(exp.robot.center[1]) + "]", exp.robot.direction])
+                        android_msg = android_message_formatter('EXPLORE', [str(exp.robot.descriptor_1()),
+                                                                            str(exp.robot.descriptor_2()), "[" + str(
+                                19 - exp.robot.center[0]) + "," + str(exp.robot.center[1]) + "]", exp.robot.direction])
+
                     else:
                         # If not 100% coverage or even if 100, but not start
                         if ((exp.exploredArea <= 99.67 or np.array_equal(exp.robot.center, START)) and continueExplore):
@@ -805,8 +811,12 @@ class RPi(threading.Thread):
                             time_t = time.time()
                             # arduino_msg and android_msg is the message to be sent to Rpi
                             arduino_msg = arduino_message_formatter(move)
-                            android_msg = android_message_formatter("EXPLORE",[str(exp.robot.descriptor_1()), str(exp.robot.descriptor_2()), "[" + str(19 - exp.robot.center[0]) + "," + str(exp.robot.center[1]) + "]", exp.robot.direction]) #delete descriptor 3
-                            print ('desc 3 = ' + str(exp.robot.descriptor_3()))
+                            # android_msg = android_message_formatter("EXPLORE",[str(exp.robot.descriptor_1()), str(exp.robot.descriptor_2()),str(exp.robot.descriptor_3()), "[" + str(19 - exp.robot.center[0]) + "," + str(exp.robot.center[1]) + "]", exp.robot.direction]) #delete descriptor 3
+                            android_msg = android_message_formatter("EXPLORE", [str(exp.robot.descriptor_1()),
+                                                                            str(exp.robot.descriptor_2()), "[" + str(
+                                19 - exp.robot.center[0]) + "," + str(exp.robot.center[1]) + "]",
+                                                                            exp.robot.direction])  # delete descriptor 3
+
                         # print 'Time 2: %s s' % (time.time() - time_t)
                         else:
                             # Inform front end that exploration is complete
@@ -850,9 +860,10 @@ class RPi(threading.Thread):
                             arduino_msg_done= arduino_message_formatter(move + calibrate_move, getSensor=False)
                             #arduino_calibrate_msg = arduino_message_formatter(calibrate_move, getSensor=False)
                             explorationDone=True
-                            android_msg = android_message_formatter('DONE', [str(exp.robot.descriptor_1()), str(exp.robot.descriptor_2()), "[" + str(19 - exp.robot.center[0]) + "," + str(exp.robot.center[1]) + "]", EAST])
-                            print ('desc 3 = ' + str(exp.robot.descriptor_3()))
-
+                            #android_msg = android_message_formatter('DONE', [str(exp.robot.descriptor_1()), str(exp.robot.descriptor_2()),str(exp.robot.descriptor_3()), "[" + str(19 - exp.robot.center[0]) + "," + str(exp.robot.center[1]) + "]", EAST])
+                            android_msg = android_message_formatter('DONE', [str(exp.robot.descriptor_1()),
+                                                                             str(exp.robot.descriptor_2()), "[" + str(
+                                    19 - exp.robot.center[0]) + "," + str(exp.robot.center[1]) + "]", EAST])
                             time.sleep(0.1)
 
                     self.client_socket.send(android_msg)
@@ -922,8 +933,13 @@ class RPi(threading.Thread):
                         exp.robot.moveBot(move)
                     arduino_msg = arduino_message_formatter(manual_movement)
                     self.send_arduino_message(arduino_msg)
-                    android_msg = android_message_formatter("DONE", [str(exp.robot.descriptor_1()),str(exp.robot.descriptor_2()),"[" + str(19 - exp.robot.center[0]) + "," + str(exp.robot.center[1]) + "]", exp.robot.direction])
-                    print ('desc 3 = ' + str(exp.robot.descriptor_3()))
+                    # android_msg = android_message_formatter("DONE", [str(exp.robot.descriptor_1()),str(exp.robot.descriptor_2(),str(exp.robot.descriptor_3())),"[" + str(19 - exp.robot.center[0]) + "," + str(exp.robot.center[1]) + "]", exp.robot.direction])
+                    android_msg = android_message_formatter("DONE", [str(exp.robot.descriptor_1()),
+                                                                     str(exp.robot.descriptor_2()),
+                                                                     "[" + str(19 - exp.robot.center[0]) + "," + str(
+                                                                         exp.robot.center[1]) + "]",
+                                                                     exp.robot.direction])
+
                     self.client_socket.send(android_msg)
 
     def keep_main(self):

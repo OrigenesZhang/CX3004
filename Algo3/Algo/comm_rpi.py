@@ -404,6 +404,11 @@ def android_send_fastest(msg, array):
     m = "a"+msg+"|"+ command
     return m.encode('utf-8')
 
+def image_string_formatter(lst):
+    str1="i|"
+    for coordinate in lst:
+        str1+=str(coordinate)+"|"
+    return str1.encode('utf-8')
 
 def arduino_message_formatter(movement, getSensor=True, fastest = False):
 
@@ -479,95 +484,7 @@ def arduino_message_formatter(movement, getSensor=True, fastest = False):
     return msg.encode('utf-8')
 
 
-def image_string_formatter(lst):
-    str1="i"
-    for coordinate in lst:
-        str1+=str(coordinate)+"|"
-    return str1.encode('utf-8')
 
-def image_recog(self, exp, currentMap):
-    r, c = exp.robot.center
-    #coordinate_list = [c, 19 - r, -1, -1, -1, -1, -1, -1]
-    haveObstacle = False
-    coordinate_list = [ -1, -1, -1, -1, -1, -1]
-    # only consider the situation where the 3 immediate blocks in front are empty.
-    # the code now covers 3 blks in front inclusive.
-    if exp.robot.direction == NORTH:
-        if currentMap[r-2][c-1] == 1 and currentMap[r - 2][c] == 1 and currentMap[r-2][c+1] == 1:
-            for i in range(3, 5):
-                if r-i > 0 and currentMap[r-i][c-1]==2:
-                    coordinate_list[0:2] = [c - 1, 19 - (r - i)]
-                    haveObstacle = True
-                    break
-            for i in range(3, 5):
-                if r-i > 0 and currentMap[r-i][c]==2:
-                    coordinate_list[2:4] = [c, 19 - (r - i)]
-                    haveObstacle = True
-                    break
-            for i in range(3, 5):
-                if r-i > 0 and currentMap[r-i][c+1]==2:
-                    coordinate_list[4:] = [c + 1, 19 - (r - i)]
-                    haveObstacle = True
-                    break
-        return haveObstacle, coordinate_list
-
-    elif exp.robot.direction == EAST:
-        if currentMap[r - 1][c + 2] == 1 and currentMap[r][c+2] == 1 and currentMap[r+1][c+2] == 1:
-            for i in range(3, 5):
-                if c + i < MAX_COLS and currentMap[r-1][c+i]==2:
-                    coordinate_list[0:2] = [c + i, 19 - (r - 1)]
-                    haveObstacle = True
-                    break
-            for i in range(3, 5):
-                if c + i < MAX_COLS and currentMap[r][c+i]==2:
-                    coordinate_list[2:4] = [c + i, 19 - r]
-                    haveObstacle = True
-                    break
-            for i in range(3, 5):
-                if c + i < MAX_COLS and currentMap[r+1][c+i]==2:
-                    coordinate_list[4:] = [c + i, 19 - (r + 1)]
-                    haveObstacle = True
-                    break
-        return haveObstacle, coordinate_list
-
-    elif exp.robot.direction == SOUTH:
-        if currentMap[r +2][c -1] == 1 and currentMap[r+2][c] == 1 and currentMap[r+2][c+1] == 1:
-            for i in range(3, 5):
-                if r + i < MAX_ROWS and currentMap[r+i][c-1]==2:
-                    coordinate_list[0:2] = [c -1, 19 - (r +i)]
-                    haveObstacle = True
-                    break
-            for i in range(3, 5):
-                if r + i < MAX_ROWS and currentMap[r+i][c]==2:
-                    coordinate_list[2:4] = [c, 19 - (r +i)]
-                    haveObstacle = True
-                    break
-            for i in range(3, 5):
-                if r + i < MAX_ROWS and currentMap[r+i][c+1]==2:
-                    coordinate_list[4:] = [c+1, 19 - (r +i)]
-                    haveObstacle = True
-                    break
-        return haveObstacle, coordinate_list
-
-    elif exp.robot.direction == WEST:
-        if currentMap[r-1][c-2] == 1 and currentMap[r][c-2] == 1 and currentMap[r+1][c-2] == 1:
-            for i in range(3, 5):
-                if c-i > 0 and currentMap[r-1][c-i]==2:
-                    coordinate_list[0:2] = [c - i, 19 - (r - 1)]
-                    haveObstacle = True
-                    break
-            for i in range(3, 5):
-                if c-i > 0 and currentMap[r][c - i]==2:
-                    coordinate_list[2:4] = [c - i, 19 - r]
-                    haveObstacle = True
-                    break
-            for i in range(3, 5):
-                if c-i > 0 and currentMap[r+1][c-i]==2:
-                    coordinate_list[4:] = [c-i, 19 - (r + 1)]
-                    haveObstacle = True
-                    break
-        return haveObstacle, coordinate_list
-    return (False, [])
 
 
 #not using
@@ -606,6 +523,90 @@ class RPi(threading.Thread):
         print ('Sent %s to RPi' % (string.decode('utf-8')))
         log_file.write("Sent %s to Arduino" % string)
         return (string)
+
+    def image_recog(self, exp, currentMap):
+        r, c = exp.robot.center
+        #coordinate_list = [c, 19 - r, -1, -1, -1, -1, -1, -1]
+        haveObstacle = False
+        coordinate_list = [ -1, -1, -1, -1, -1, -1]
+        # only consider the situation where the 3 immediate blocks in front are empty.
+        # the code now covers 3 blks in front inclusive.
+        if exp.robot.direction == NORTH:
+            if currentMap[r-2][c-1] == 1 and currentMap[r - 2][c] == 1 and currentMap[r-2][c+1] == 1:
+                for i in range(3, 5):
+                    if r-i > 0 and currentMap[r-i][c-1]==2:
+                        coordinate_list[0:2] = [c - 1, 19 - (r - i)]
+                        haveObstacle = True
+                        break
+                for i in range(3, 5):
+                    if r-i > 0 and currentMap[r-i][c]==2:
+                        coordinate_list[2:4] = [c, 19 - (r - i)]
+                        haveObstacle = True
+                        break
+                for i in range(3, 5):
+                    if r-i > 0 and currentMap[r-i][c+1]==2:
+                        coordinate_list[4:] = [c + 1, 19 - (r - i)]
+                        haveObstacle = True
+                        break
+            return haveObstacle, coordinate_list
+
+        elif exp.robot.direction == EAST:
+            if currentMap[r - 1][c + 2] == 1 and currentMap[r][c+2] == 1 and currentMap[r+1][c+2] == 1:
+                for i in range(3, 5):
+                    if c + i < MAX_COLS and currentMap[r-1][c+i]==2:
+                        coordinate_list[0:2] = [c + i, 19 - (r - 1)]
+                        haveObstacle = True
+                        break
+                for i in range(3, 5):
+                    if c + i < MAX_COLS and currentMap[r][c+i]==2:
+                        coordinate_list[2:4] = [c + i, 19 - r]
+                        haveObstacle = True
+                        break
+                for i in range(3, 5):
+                    if c + i < MAX_COLS and currentMap[r+1][c+i]==2:
+                        coordinate_list[4:] = [c + i, 19 - (r + 1)]
+                        haveObstacle = True
+                        break
+            return haveObstacle, coordinate_list
+
+        elif exp.robot.direction == SOUTH:
+            if currentMap[r +2][c -1] == 1 and currentMap[r+2][c] == 1 and currentMap[r+2][c+1] == 1:
+                for i in range(3, 5):
+                    if r + i < MAX_ROWS and currentMap[r+i][c-1]==2:
+                        coordinate_list[0:2] = [c -1, 19 - (r +i)]
+                        haveObstacle = True
+                        break
+                for i in range(3, 5):
+                    if r + i < MAX_ROWS and currentMap[r+i][c]==2:
+                        coordinate_list[2:4] = [c, 19 - (r +i)]
+                        haveObstacle = True
+                        break
+                for i in range(3, 5):
+                    if r + i < MAX_ROWS and currentMap[r+i][c+1]==2:
+                        coordinate_list[4:] = [c+1, 19 - (r +i)]
+                        haveObstacle = True
+                        break
+            return haveObstacle, coordinate_list
+
+        elif exp.robot.direction == WEST:
+            if currentMap[r-1][c-2] == 1 and currentMap[r][c-2] == 1 and currentMap[r+1][c-2] == 1:
+                for i in range(3, 5):
+                    if c-i > 0 and currentMap[r-1][c-i]==2:
+                        coordinate_list[0:2] = [c - i, 19 - (r - 1)]
+                        haveObstacle = True
+                        break
+                for i in range(3, 5):
+                    if c-i > 0 and currentMap[r][c - i]==2:
+                        coordinate_list[2:4] = [c - i, 19 - r]
+                        haveObstacle = True
+                        break
+                for i in range(3, 5):
+                    if c-i > 0 and currentMap[r+1][c-i]==2:
+                        coordinate_list[4:] = [c-i, 19 - (r + 1)]
+                        haveObstacle = True
+                        break
+            return haveObstacle, coordinate_list
+        return (False, [])
 
 
     # Receive and send data to RPi data

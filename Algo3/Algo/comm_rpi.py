@@ -932,10 +932,9 @@ class RPi(threading.Thread):
                             android_msg = android_message_formatter('DONE', [str(exp.robot.descriptor_1()), str(exp.robot.descriptor_2()),str(exp.robot.descriptor_3()), "[" + str(19 - exp.robot.center[0]) + "," + str(exp.robot.center[1]) + "]", EAST])
 
 
-                            rpi_msg = 'k'.encode('utf-8')
-                            print 'Send %s to RPi' % rpi_msg.decode('utf-8')
-                            self.client_socket.send(rpi_msg)
-
+                            # rpi_msg = 'k'.encode('utf-8')
+                            # print 'Send %s to RPi' % rpi_msg.decode('utf-8')
+                            # self.client_socket.send(rpi_msg)
                             time.sleep(0.1)
 
                     haveObstable, coordinate_list = self.image_recog(exp=exp, r=pr, c=pc, currentMap=exp.currentMap)

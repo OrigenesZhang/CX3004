@@ -575,7 +575,7 @@ class RPi(threading.Thread):
             if r+2 < MAX_ROWS and currentMap[r +2][c -1] == 1 and currentMap[r+2][c] == 1 and currentMap[r+2][c+1] == 1:
                 for i in range(3, 5):
                     if r + i < MAX_ROWS and currentMap[r+i][c-1]==2:
-                        coordinate_list[0:2] = [c -1, 19 - (r +i)]
+                        coordinate_list[4:] = [c -1, 19 - (r +i)]
                         haveObstacle = True
                         break
                 for i in range(3, 5):
@@ -585,7 +585,7 @@ class RPi(threading.Thread):
                         break
                 for i in range(3, 5):
                     if r + i < MAX_ROWS and currentMap[r+i][c+1]==2:
-                        coordinate_list[4:] = [c+1, 19 - (r +i)]
+                        coordinate_list[0:2] = [c+1, 19 - (r +i)]
                         haveObstacle = True
                         break
             return haveObstacle, coordinate_list
@@ -594,7 +594,7 @@ class RPi(threading.Thread):
             if c-2 >= 0 and (currentMap[r-1][c-2] == 1 and currentMap[r][c-2] == 1 and currentMap[r+1][c-2] == 1):
                 for i in range(3, 5):
                     if c-i >= 0 and currentMap[r-1][c-i]==2:
-                        coordinate_list[0:2] = [c - i, 19 - (r - 1)]
+                        coordinate_list[4:] = [c - i, 19 - (r - 1)]
                         haveObstacle = True
                         break
                 for i in range(3, 5):
@@ -604,7 +604,7 @@ class RPi(threading.Thread):
                         break
                 for i in range(3, 5):
                     if c-i >= 0 and currentMap[r+1][c-i]==2:
-                        coordinate_list[4:] = [c-i, 19 - (r + 1)]
+                        coordinate_list[0:2] = [c-i, 19 - (r + 1)]
                         haveObstacle = True
                         break
             return haveObstacle, coordinate_list

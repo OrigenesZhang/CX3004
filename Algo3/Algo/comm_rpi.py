@@ -691,8 +691,8 @@ class RPi(threading.Thread):
                         print ('desc 3 = ' + str(exp.robot.descriptor_3()))
                     else:
                         # If not 100% coverage or even if 100, but not start
-                        if ((exp.exploredArea <= 99.67 or np.array_equal(exp.robot.center, START)) and continueExplore):
-                        #if (exp.exploredArea <= 99.67 and continueExplore):
+                        #if ((exp.exploredArea <= 99.67 or np.array_equal(exp.robot.center, START)) and continueExplore):
+                        if (exp.exploredArea <= 99.67 and continueExplore):
                             current = exp.moveStep(sensors) # Get next movements and whether or not 100% covergae is reached
                             currentMap = exp.currentMap
                             area = exp.exploredArea
